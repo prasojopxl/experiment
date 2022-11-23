@@ -1,21 +1,19 @@
-var express = require('express');
+var express = require("express");
+const verifyToken = require("../middlewares/verify-token");
 var router = express.Router();
-const userHandler = require("./handlers/user")
-const userIdHandler = require("./handlers/user/id")
+const userHandler = require("./handlers/user");
+const userIdHandler = require("./handlers/user/id");
 
 /* GET All Data Users. */
-router.get("/",userHandler.get)
+router
+    .route("/")
+    .get(verifyToken, userHandler.get)
+    .post(verifyToken, userHandler.post);
 /* GET User By ID */
-router.get("/:userId",userIdHandler.get)
-
-/* PUT DATA USER */
-router.put("/:userId",userIdHandler.put)
-
-// Create Data Users
-router.post("/",userHandler.post)
-
-// Delete Data Users
-router.delete("/:userId",userIdHandler.delete)
-
+router
+    .route("/:userId")
+    .get(verifyToken, userIdHandler.get)
+    .put(verifyToken, userIdHandler.put)
+    .delete(verifyToken, userIdHandler.delete);
 
 module.exports = router;
